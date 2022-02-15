@@ -52,4 +52,5 @@ class Tracker():
 
         while True:
             self.tracker.subscribe_to(tr.EYETRACKER_GAZE_DATA, gaze_data_callback, as_dictionary=True)
+            
             sleep(5)
