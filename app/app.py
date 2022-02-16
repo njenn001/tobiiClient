@@ -70,6 +70,15 @@ def main():
         # Run Mode
         mode_group.add_argument('-r', '--run', action='store_true',
                                 help='Start tracking gui.')
+
+
+        '''
+        Specify different flags 
+        - name 
+        - wait time (s)
+        - broker id 
+        - length 
+        '''
         
         return parser 
             

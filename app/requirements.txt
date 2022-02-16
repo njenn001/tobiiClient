@@ -1,2 +1,3 @@
 tobii_research
 matplotlib
+kafka-python

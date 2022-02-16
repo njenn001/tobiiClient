@@ -1,5 +1,6 @@
 import time 
 from time import * 
+import threading 
 import tobii_research as tr
 from tobii_research import * 
 
@@ -9,6 +10,9 @@ class Tracker():
         self.tracker = None 
         self. name = None 
         self.gaze_callback = None 
+
+        # Threads 
+        self.gaze_thread = None
 
         self.initialize()
 
@@ -46,11 +50,15 @@ class Tracker():
         
         def gaze_data_callback(gaze_data):
             # Print gaze points of left and right eye
-            print("Left eye: ({gaze_left_eye}) \t Right eye: ({gaze_right_eye})".format(
+            print("Left eye: ({gaze_left_eye},{gaze_left_pupil}) \t Right eye: ({gaze_right_eye},{gaze_right_pupil})".format(
                 gaze_left_eye=gaze_data['left_gaze_point_on_display_area'],
-                gaze_right_eye=gaze_data['right_gaze_point_on_display_area']))
+                gaze_right_eye=gaze_data['right_gaze_point_on_display_area'], 
+                gaze_left_pupil=gaze_data['left_pupil_diameter'],
+                gaze_right_pupil=gaze_data['right_pupil_diameter']))
 
         while True:
-            self.tracker.subscribe_to(tr.EYETRACKER_GAZE_DATA, gaze_data_callback, as_dictionary=True)
-            
+            try: 
+                self.tracker.subscribe_to(tr.EYETRACKER_GAZE_DATA, gaze_data_callback, as_dictionary=True)
+            except Exception as ex:
+                pass        
             sleep(5)
