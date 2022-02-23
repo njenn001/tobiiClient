@@ -15,9 +15,9 @@ def main():
             
             print('none')
         
-        elif args.setup: 
+        elif args.env: 
             from scenario import Scenario
-            print('Starting setup sequence ...')
+            print('Starting setup sequence...')
                     
             # Run evaluation and resulting programs 
             scene = Scenario() 
@@ -28,21 +28,33 @@ def main():
                 
         elif args.clean: 
             from scenario import Scenario
+            print('Cleaning...')
             
             scene = Scenario() 
             scene.clean_sequence() 
         
-        elif args.run: 
+        elif args.strict: 
             from user import User 
-            print('Starting tobii client')
+            print('Starting strict mode...')
 
             # Run GUI 
             you = User() 
 
             try: 
-                you.run() 
+                you.run_strict() 
             except Exception as ex: 
                 you.throw_exec('r')
+            
+        elif args.gui: 
+            from user import User 
+            print('Starting gui...')
+
+            you = User()
+
+            try: 
+                you.gui()
+            except Exception as ex: 
+                you.throw_exec('gui')
             
 
     # Init command parser 
@@ -53,28 +65,33 @@ def main():
             
         '''
         Specify different interface modes
-        - setup 
-        - test 
-        - run 
+        - env 
+        - clean 
+        - strict
+        - gui 
         '''
         mode_group = parser.add_mutually_exclusive_group(required=True)
 
         # Setup Mode 
-        mode_group.add_argument('-s', '--setup', action='store_true',
+        mode_group.add_argument('-e', '--env', action='store_true',
                                 help='Initialize environment setups.')
 
         # Test Mode
         mode_group.add_argument('-c', '--clean', action='store_true',
                                 help='Clean directory.')
 
-        # Run Mode
-        mode_group.add_argument('-r', '--run', action='store_true',
-                                help='Start tracking gui.')
+        # Strict Mode
+        mode_group.add_argument('-s', '--strict', action='store_true',
+                                help='Start tracking.')
+
+        # Gui Mode 
+        mode_group.add_argument('-g', '--gui', action='store_true',
+                                help='Start GUI.')        
 
 
         '''
         Specify different flags 
-        - name 
+        - name
         - wait time (s)
         - broker id 
         - length 

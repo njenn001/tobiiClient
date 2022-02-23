@@ -77,8 +77,8 @@ class Scenario():
          
     # Init Scenario
     def init(self): 
-        self.os_eval()
-        self.version_check()
+        #self.os_eval()
+        #self.version_check()
         
         self.set_inst_thread( threading.Thread(target=self.virtual_init, args=([]) ) )
         self.add_thread(self.get_inst_thread())
@@ -153,6 +153,9 @@ class Scenario():
     
     # Init virtual environment 
     def virtual_init(self): 
+        self.os_eval()
+        self.version_check()
+        
         if self.get_os_name() == 'nt':
             try:
                 print('\nCreating virtual environment ...\n')

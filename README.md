@@ -1,6 +1,6 @@
 # Tobii Client 
 
-Stream tobii gaze data to kafak brokers
+Stream tobii gaze data to kafka brokers
 
 ## System Requiements 
     - python 3.8
@@ -17,7 +17,7 @@ First install dependencies and create virtual environment by running setup scrip
 
 ```
 python setup.py 
-python app\app.py -s 
+python app\app.py -e
 ```
 
 Activate the virtual environment before using. A help script is provided with the application.
@@ -39,7 +39,7 @@ First create virtual environment and install dependencies by running setup scrip
 
 ```
 python setup.py 
-python app/app.py -s 
+python app/app.py -e 
 ```
 
 Activate the virtual environment before using. A help script is provided with the application.
