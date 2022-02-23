@@ -24,7 +24,7 @@ Activate the virtual environment before using. A help script is provided with th
 
 ```
 .\venv\Scripts\activate     
-python app\app.py -h
+.\venv\Scripts\python.exe .\app\app.py -h
 ```
 
 

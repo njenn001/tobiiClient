@@ -1,9 +1,9 @@
 import os 
-from tkinter import * 
-
+from tkinter import *
 
 from tracker import Tracker 
 from gaze import Gaze 
+from controller import Controller 
 
 class User(): 
     def __init__(self):
@@ -13,12 +13,21 @@ class User():
         self.controller = None 
 
     # GET / SET tracker 
+    def get_tracker(self): 
+        return self.tracker
     # GET / SET gaze
+    def set_tracker(self, tracker): 
+        self.tracker = tracker 
     # GET / SET root 
     def get_root(self): 
         return self.root
     def set_root(self, root):
         self.root = root 
+    # GET / SET controller
+    def get_controller(self): 
+        return self.controller
+    def set_controller(self, controller): 
+        self.controller = controller 
 
     # Throw exception 
     def throw_exec(self, msg): 
@@ -41,6 +50,7 @@ class User():
 
 
         root_init(self)
+        self.set_controller(Controller(self.root, self))
 
         self.root.mainloop()
 
