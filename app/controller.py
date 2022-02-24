@@ -10,22 +10,12 @@ class Controller(Frame):
         super().__init__()
         self.root = root
         self.tester = None 
-        
-        
-        # status 
-        self.status_bar = None
 
         # frames 
         self.button_frame = None
         self.input_frame = None
     
         # buttons 
-        self.topic_button = None 
-        self.topics_button = None 
-        self.message_button = None
-        self.stream_button = None
-        self.get_button = None 
-        self.listen_button = None
         self.test_button = None
         self.start_button = None 
         self.stop_button = None 
@@ -33,39 +23,88 @@ class Controller(Frame):
 
         # titles 
         self.title = None 
-        self.title_txt = 'Begin by testing broker IP connection'
+        self.title_txt = 'Ensure Tracker connction'
         
-        self.host_title = None 
-        self.port_title = None 
-        self.message_title = None 
-        self.topic_title = None 
-        self.rep_fac_title = None
-        self.part_title = None
+        self.name_title = 'Name' 
+        self.host_title = 'Host' 
+        self.port_title = 'Port'
+        self.topic_title = 'Topic' 
 
         # entries 
+        self.name_entry = None 
         self.host_entry = None
-        self.port_entry = None 
-        self.message_entry = None 
+        self.port_entry = None  
         self.topic_entry = None 
-        self.rep_fac_entry = None
-        self.part_entry = None
 
         # boolean flags 
-        self.topic_started = False 
-        self.msg_started = False 
-        self.stream_started = False 
-        self.get_started = False
-        self.listen_started = False  
+        self.stream_started = False
         self.test_started = False 
 
         # threads
-        self.topic_thread = None
-        self.msg_thread = None 
-        self.get_thread = None 
+        self.stream_thread = None
 
         # Controller Init 
         self.UIinit()
+    
+    # GET / SET test button 
+    def get_test_button(self): 
+        return self.test_button
+    def set_test_button(self, test_button): 
+        self.test_button = test_button
         
+    # GET / SET start button
+    def get_start_button(self): 
+        return self.start_button
+    def set_start_button(self, start_button): 
+        self.start_button = start_button
+        
+    # GET / SET stop button 
+    def get_stop_button(self): 
+        return self.stop_button
+    def set_stop_button(self, stop_button): 
+        self.stop_button = stop_button 
+        
+    # GET / SET close button 
+    def get_close_button(self): 
+        return self.close_button 
+    def set_close_button(self, close_button): 
+        self.close_button = close_button
+            
+    # GET / SET title 
+    def get_title(self): 
+        return self.title
+    def set_title(self, title): 
+        self.title = title
+        
+    # GET / SET title text 
+    def get_title_txt(self): 
+        return self.title_txt
+    def set_title_txt(self, title_txt): 
+        self.title_txt = title_txt 
+        
+    # GET / SET name entry
+    def get_name_entry(self): 
+        return self.name_entry
+    def set_name_entry(self, name_entry): 
+        self.name_entry = name_entry
+        
+    # GET / SET host entry
+    def get_host_entry(self): 
+        return self.host_entry
+    def set_host_entry(self, host_entry): 
+        self.host_entry = host_entry
+        
+    # GET / SET port entry
+    def get_port_entry(self): 
+        return self.port_entry
+    def set_port_entry(self, port_entry): 
+        self.port_entry = port_entry
+        
+    # GET / SET topic entry
+    def get_topic_entry(self): 
+        return self.topic_entry
+    def set_topic_entry(self, topic_entry): 
+        self.topic_entry = topic_entry 
         
     # Reconfigure button elements 
     def reconfig(self, conf_str): 
@@ -89,8 +128,7 @@ class Controller(Frame):
     
     # Init UI elements / abilities 
     def UIinit(self): 
-        
-        # REWRITE 
+         
         # OS specific and shutdown TK 
         def close(object):
             object.root.destroy() 
@@ -605,12 +643,6 @@ class Controller(Frame):
                 object.button_frame = Frame(object.root, borderwidth=2, border=1)
                 object.button_frame.grid(row=1, column=0, pady=50, padx=(50,25))
                 
-                object.topic_button = Button(object.button_frame, text="New Topic", command= lambda:topic_seq(object), width=15, state='disabled', bg = 'white')
-                object.topics_button = Button(object.button_frame, text="Topics", command= lambda:msg_seq(object), width=15, state='disabled', bg = 'white')
-                object.message_button = Button(object.button_frame, text="Message", command= lambda:msg_seq(object), width=15, state='disabled', bg = 'white')
-                object.stream_button = Button(object.button_frame, text="Stream", command= lambda:close(object), width=15, state='disabled', bg = 'white')
-                object.get_button = Button(object.button_frame, text="Get", command= lambda:get_seq(object), width=15, state='disabled', bg = 'white')
-                object.listen_button = Button(object.button_frame, text="Listen", command= lambda:close(object), width=15, state='disabled', bg = 'white')
                 object.test_button = Button(object.button_frame, text="Test", command= lambda:test_seq(object), width=15, state='normal', bg = 'white')
                 object.start_button = Button(object.button_frame, text="Start/Send", command= lambda:start_send_seq(object), width=15, state='disabled', bg = 'white')
                 object.stop_button = Button(object.button_frame, text="Stop", command= lambda:stop_seq(object), width=15, state='disabled', bg = 'white')
