@@ -1,0 +1,106 @@
+Metadata-Version: 1.0
+Name: TobiiClient
+Version: 0.0.1
+Summary: Stream Tobii tracker data
+Home-page: https://github.com/njenn001/tobiiClient
+Author: Noah Jennings
+Author-email: njenn001@odu.edu
+License: MIT License
+
+Copyright (c) [year] [fullname]
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+Description: # Tobii Client 
+        
+        Stream tobii gaze data to kafka brokers
+        
+        ## Prerequisites
+        
+            - python 3.8
+            - Tkinter 
+            - tobii_research 
+        
+        
+        ## Usage
+        
+        After confirming correct Python 3.8.2 installation, os dependent instructions are provided below.
+        
+        ### Windows users
+        First install dependencies and create virtual environment by running setup scripts:
+        
+        ```
+        python app\app.py -e
+        ```
+        
+        Activate the virtual environment before using. A help script is provided with the application.
+        
+        ```
+        .\venv\Scripts\activate     
+        .\venv\Scripts\python.exe .\app\app.py -h
+        ```
+        
+        
+        Deactivate the virtual environment as such:
+        
+        ```
+        deactivate 
+        ```
+        
+        ### Linux users
+        First create virtual environment and install dependencies by running setup scripts:
+        
+        ```
+        python setup.py 
+        python app/app.py -e 
+        ```
+        
+        Activate the virtual environment before using. A help script is provided with the application.
+        
+        ```
+        source ./venv/bin/activate      
+        ./venv/bin/python app/app.py -h
+        ```
+        
+        
+        Deactivate the virtual environment as such:
+        
+        ```
+        deactivate 
+        ```
+        
+        
+        ## Acknowledgments
+        
+        
+        ### Code Contributors
+        
+            - Noah Jennings 
+                - njenn001@odu.edu
+        
+        ### Authors
+        
+            - Noah Jennings
+                - njenn001@odu.edu
+        
+        ## Sources
+        
+        - https://www.tobiipro.com/
+        - https://www.tobiipro.com/learn-and-support/learn/
+        - https://developer.tobiipro.com/python/python-getting-started.html 
+Platform: UNKNOWN

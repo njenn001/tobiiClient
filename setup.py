@@ -16,5 +16,8 @@ setup(
     author_email='njenn001@odu.edu',
     url='https://github.com/njenn001/tobiiClient',
     license=license,
-    packages=['app',]
+    packages=['app',], 
+    install_requires = [
+        'kafka-python',
+    ]
 )

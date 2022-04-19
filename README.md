@@ -2,63 +2,86 @@
 
 Stream tobii gaze data to kafka brokers
 
-## System Requiements 
+## Prerequisites
+
     - python 3.8
-    - Tkinter 
-    - tobii_research 
+    - python3-venv
+    - python3-pip 
 
 
 ## Usage
 
-After confirming correct Python 3.8.2 installation, os dependent instructions are provided below.
+After confirming correct Python installations, os dependent instructions are provided below.
 
 ### Windows users
-First install dependencies and create virtual environment by running setup scripts:
 
-```
-python setup.py 
-python app\app.py -e
-```
+1. Clone the repository 
 
-Activate the virtual environment before using. A help script is provided with the application.
+    ```
+    git clone https://github.com/njenn001/tobiiClient.git
+    ```
 
-```
-.\venv\Scripts\activate     
-.\venv\Scripts\python.exe .\app\app.py -h
-```
+2. First install dependencies and create virtual environment by running setup scripts:
 
+    ```
+    python app\app.py -e
+    ```
 
-Deactivate the virtual environment as such:
+3. Activate the virtual environment before using.
 
-```
-deactivate 
-```
+    ```
+    .\venv\Scripts\activate     
+    .\venv\Scripts\python.exe .\app\app.py -h
+    ```
+
+4. The application comes with a strict mode and an interactive gui.
+
+    ```
+    .\venv\Scripts\python.exe .\app\app.py -g
+    .\venv\Scripts\python.exe .\app\app.py -s
+    ```
+
+5. Deactivate the virtual environment as such:
+
+    ```
+    deactivate 
+    ```
 
 ### Linux users
-First create virtual environment and install dependencies by running setup scripts:
 
-```
-python setup.py 
-python app/app.py -e 
-```
+1. Clone the repository 
 
-Activate the virtual environment before using. A help script is provided with the application.
+    ```
+    git clone https://github.com/njenn001/tobiiClient.git
+    ```
 
-```
-source ./venv/bin/activate      
-./venv/bin/python app/app.py -h
-```
+2. First install dependencies and create virtual environment by running setup scripts:
 
+    ```
+    python app/app.py -e
+    ```
 
-Deactivate the virtual environment as such:
+3. Activate the virtual environment before using.
 
-```
-deactivate 
-```
+    ```
+    source ./venv/bin/activate     
+    ./venv/Scripts/python.exe ./app/app.py -h
+    ```
+
+4. The application comes with a strict mode and an interactive gui (on applicable machines).
+
+    ```
+    ./venv/Scripts/python.exe ./app/app.py -s
+    ```
+
+5. Deactivate the virtual environment as such:
+
+    ```
+    deactivate 
+    ```
 
 
 ## Acknowledgments
-
 
 ### Code Contributors
 
@@ -69,7 +92,9 @@ deactivate
 
     - Noah Jennings
         - njenn001@odu.edu
-
+        
+    - Vincent Houston 
+        - vincent.e.houston@nasa.gov
 ## Sources
 
 - https://www.tobiipro.com/

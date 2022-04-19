@@ -17,8 +17,7 @@ class Scenario():
                 
         # Threads 
         self.t_list = [] 
-        self.virt_thread = None 
-        self.nat_thread = None 
+        self.inst_thread = None 
         
         # You 
         self.you = None
@@ -58,18 +57,12 @@ class Scenario():
     def add_thread(self, thread): 
         self.t_list.append(thread)
     
-    # GET / SET virtual thread 
-    def get_virt_thread(self): 
-        return self.virt_thread
-    def set_virt_thread(self, virt_thread):
-        self.virt_thread = virt_thread
+    # GET / SET install thread 
+    def get_inst_thread(self): 
+        return self.inst_thread
+    def set_inst_thread(self, inst_thread):
+        self.inst_thread = inst_thread
     
-    # GET / SET natural thread
-    def get_nat_thread(self): 
-        return self.nat_thread
-    def set_nat_thread(self, nat_thread): 
-        self.nat_thread = nat_thread
-
     # GET / SET you 
     def get_you(self): 
         return self.you
@@ -84,10 +77,12 @@ class Scenario():
          
     # Init Scenario
     def init(self): 
-        self.os_eval()
-        self.version_check()
+        #self.os_eval()
+        #self.version_check()
         
-        self.configure_threads()
+        self.set_inst_thread( threading.Thread(target=self.virtual_init, args=([]) ) )
+        self.add_thread(self.get_inst_thread())
+        #self.inst_thread.start() 
         
     # Clean project directories 
     def clean_sequence(self):
@@ -110,6 +105,7 @@ class Scenario():
         else: 
             linux_clean(self)
          
+   
     # Empty terminal contents 
     def clear_screen(self): 
         if self.os_name == 'nt': 
@@ -123,29 +119,28 @@ class Scenario():
         # Python version exception 
         if msg == 'version':
             
-            self.clean_sequence() 
-            self.clear_screen() 
+            
+            
             raise Exception("Must be using Python 3.8.") 
         
         # Requirement file exception 
         elif msg == 'req':
             
-            self.clean_sequence() 
-            self.clear_screen() 
+            
+
             raise Exception("Requirements.txt must exist.")
         
+        elif msg == 'Env': 
+            
+            
+            
+            raise Exception("Windows virtual environment.")
+
         elif msg == 'env': 
             
-            self.clean_sequence() 
-            self.clear_screen() 
-            raise Exception("Error creating virtual environment.")
-
-        elif msg == 'nat': 
             
-            self.clean_sequence() 
-            self.clear_screen() 
-            raise Exception("Error using natural environment.")
-
+            
+            raise Exception("Linux virtual environment.")
 
     # Stop all running threads
     def stop_threads(self): 
@@ -156,57 +151,46 @@ class Scenario():
         except Exception as ex: 
             self.stop_threads() 
     
-    # Configure scenario threads
-    def configure_threads(self): 
-
-        self.set_virt_thread( threading.Thread(target=self.virtual_init, args=([]) ) )
-        self.set_nat_thread( threading.Thread(target=self.natural_init, args=([]) ) )
-
-        self.add_thread(self.get_virt_thread())   
-        self.add_thread(self.get_nat_thread())     
-
     # Init virtual environment 
     def virtual_init(self): 
+        self.os_eval()
+        self.version_check()
         
         if self.get_os_name() == 'nt':
             try:
                 print('\nCreating virtual environment ...\n')
-                os.system(r"virtualenv \..\venv")
+                os.system("virtualenv " + self.get_root_dir()  + r"\..\venv")
                 time.sleep(5)
                 
                 os.sys.execuatble = str(self.get_root_dir() + r"\venv\Scripts\python.exe")
-            
-                print('\nInstall virtual requirments ...\n')
-                os.system(r'.\venv\Scripts\pip.exe install -r .\app\requirements.txt')
+                val = os.system(r'.\venv\Scripts\activate.bat')
+                if val == 0: 
+                    
+                    print('\nActivating virtual environment ...\n')
+                    os.system(r'.\venv\Scripts\activate.bat')
+                    
+                    print('\nInstall virtual requirments ...\n')
+                    os.system(r'.\venv\Scripts\pip.exe install -r .\app\requirements.txt')
             except Exception as ex: 
-                self.throw_exc('env')
+                self.throw_exc('Env')
         else: 
             try: 
                 print('\nCreating virtual environment ...\n') 
-                os.system(r"virtualenv /../venv")
+                os.system("virtualenv " + self.get_root_dir() + r"/../venv")
                 time.sleep(5)
                 
                 os.sys.execuatble = self.get_root_dir() + r"/venv/bin/python"
+                val = os.system(r'./venv/bin/activate')
+                if val == 0: 
                     
-                print('\nInstalling virtual requirments ...\n')
-                os.system(r'./venv/bin/pip install -r ./app/requirements.txt')
+                    print('\nActivating virtual environment ...\n')
+                    os.system(r'./venv/bin/activate')
+                    
+                    print('\nInstalling virtual requirments ...\n')
+                    os.system(r'./venv/bin/pip install -r ./app/requirements.txt')
             except Exception as ex: 
                 self.throw_exc('env')
-
-    # Init natural environment 
-    def natural_init(self): 
-        
-        if self.get_os_name() == 'nt': 
-            try:        
-                os.system(r'pip install -r app\requirements.txt')
-            except Exception as ex:
-                self.throw_exc('nat')
-        else: 
-            try:        
-                os.system(r'pip install -r app/requirements.txt')
-            except Exception as ex:
-                self.throw_exc('nat')
-
+                 
     # Check version
     def os_eval(self): 
         self.set_os_name(os.name.replace(' ', '')) 
