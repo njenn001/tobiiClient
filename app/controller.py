@@ -3,13 +3,13 @@ import os
 import threading
 import time 
 
-from tester import Tester
+from tester import Tester 
 
 class Controller(Frame): 
 
     def __init__(self, root, user):
-        self.user = user
         super().__init__()
+        self.user = user
         self.root = root
         self.tester = None 
 
@@ -28,12 +28,14 @@ class Controller(Frame):
         self.title_txt = 'Ensure Tracker connction'
         
         self.name_title = 'Name' 
+        self.pin_title = 'Pin'
         self.host_title = 'Host' 
         self.port_title = 'Port'
         self.topic_title = 'Topic' 
 
         # entries 
         self.name_entry = None 
+        self.pin_entry = None 
         self.host_entry = None
         self.port_entry = None  
         self.topic_entry = None 
@@ -48,7 +50,37 @@ class Controller(Frame):
 
         # Controller Init 
         self.UIinit()
+
+    # GET / SET user 
+    def get_user(self): 
+        return self.user 
+    def set_user(self, user): 
+        self.user = user 
+
+    # GET / SET root 
+    def get_root(self): 
+        return self.root
+    def set_root(self, root): 
+        self.root = root
+
+    # GET / SET tester 
+    def get_tester(self): 
+        return self.tester 
+    def set_tester(self, tester): 
+        self.tester = tester 
+
+    # GET / SET button frame 
+    def get_button_frame(self): 
+        return self.button_frame
+    def set_button_frame(self, button_frame): 
+        self.button_frame = button_frame
     
+    # GET / SET input frame 
+    def get_input_frame(self): 
+        return self.input_frame
+    def set_input_frame(self, input_frame): 
+        self.input_frame = input_frame 
+
     # GET / SET test button 
     def get_test_button(self): 
         return self.test_button
@@ -90,6 +122,12 @@ class Controller(Frame):
         return self.name_entry.get()
     def set_name_entry(self, name_entry): 
         self.name_entry = name_entry
+
+    # GET / SET pin entry 
+    def get_pin_entry(self): 
+        return self.pin_entry
+    def set_pin_entry(self, pin_entry): 
+        self.pin_entry = pin_entry
         
     # GET / SET host entry
     def get_host_entry(self): 
@@ -114,18 +152,30 @@ class Controller(Frame):
         
         if conf_str == 'init': 
             self.name_entry.config(state='disabled')
+            self.pin_entry.config(state='disabled')
             self.host_entry.config(state='normal')
             self.port_entry.config(state='normal')
+            self.topic_entry.config(state='disabled')  
+        elif conf_str == 'test_s': 
+            self.name_entry.config(state='normal')
+            self.pin_entry.config(state='normal')
+            self.host_entry.config(state='disabled')
+            self.port_entry.config(state='disabled')
             self.topic_entry.config(state='normal')  
-    
+
+    # OS specific and shutdown TK 
+    def close(self):
+        self.get_root().destroy() 
+        #os.sys.exit()
+
     # Init UI elements / abilities 
     def UIinit(self): 
-         
+
         # OS specific and shutdown TK 
         def close(object):
-            object.root.destroy() 
+            object.get_root().destroy() 
             os.sys.exit()
-        
+         
         # REWIRE THIS 
         # Start action_set or Send action 
         def start_send_seq(object): 
@@ -138,12 +188,16 @@ class Controller(Frame):
           
         # Perform tests before accessing other KAFKA elements 
         def test_seq(object): 
+
+            self.get_user().set_broker_id(self.get_host_entry())
+            self.get_user().set_broker_port(self.get_port_entry())
+
+            some = self.get_user().get_broker_id() + ":" + self.get_user().get_broker_port()
+            self.get_user().set_broker_str(some)
+
+            self.set_tester(Tester(self.get_user()))
+            self.get_tester().run()            
             
-            object.tester = Tester(object)
-            object.tester.run() 
-            
-            pass
-        
         # Initialize input frame  
         def init_input_frames(object): 
             
@@ -153,10 +207,15 @@ class Controller(Frame):
                 
                 if e.widget.cget('state') == 'normal': 
                    
-                    if e.widget.get() == 'Firstname Lastname': 
+                    if e.widget.get() == 'username': 
                         object.name_entry.delete(0,'end')
                         object.name_entry.insert(0, '')
                         object.name_entry.config(fg = 'black')
+
+                    elif e.widget.get() == '000': 
+                        object.pin_entry.delete(0,'end')
+                        object.pin_entry.insert(0, '')
+                        object.pin_entry.config(fg = 'black')
 
                     elif e.widget.get() == '0.0.0.0': 
                         object.host_entry.delete(0, 'end')
@@ -168,7 +227,7 @@ class Controller(Frame):
                         object.port_entry.insert(0, '')
                         object.port_entry.config(fg = 'black')
                     
-                    elif e.widget.get() == 'tobiistream': 
+                    elif e.widget.get() == 'main': 
                         object.topic_entry.delete(0, 'end')
                         object.topic_entry.insert(0, '')
                         object.topic_entry.config(fg = 'black')
@@ -177,8 +236,15 @@ class Controller(Frame):
             def on_move_name(e): 
                 if e.widget.cget('state') == 'normal': 
                     if e.widget.get() == '': 
-                        object.name_entry.insert(0, 'Firstname Lastname')
-                        object.name_entry.config(fg='grey')                 
+                        object.name_entry.insert(0, 'username')
+                        object.name_entry.config(fg='grey')        
+
+            # Focus away from pin entry
+            def on_move_pin(e): 
+                if e.widget.cget('state') == 'normal': 
+                    if e.widget.get() == '': 
+                        object.pin_entry.insert(0, '000')
+                        object.pin_entry.config(fg='grey')         
                                 
             # Focus away from host entry 
             def on_move_host(e): 
@@ -198,7 +264,7 @@ class Controller(Frame):
             def on_move_topic(e): 
                 if e.widget.cget('state') == 'normal': 
                     if e.widget.get() == '': 
-                        object.topic_entry.insert(0, 'tobiistream')
+                        object.topic_entry.insert(0, 'main')
                         object.topic_entry.config(fg='grey')
             
             # Bind entry actions 
@@ -206,6 +272,9 @@ class Controller(Frame):
                 
                 object.name_entry.bind('<FocusIn>', on_click)
                 object.name_entry.bind('<FocusOut>', on_move_name)
+
+                object.pin_entry.bind('<FocusIn>', on_click)
+                object.pin_entry.bind('<FocusOut>', on_move_pin)
 
                 object.host_entry.bind('<FocusIn>', on_click)
                 object.host_entry.bind('<FocusOut>', on_move_host)
@@ -221,41 +290,44 @@ class Controller(Frame):
 
                 object.name_title.grid(row=0, column=0)
                 object.name_entry.grid(row=0, column=1) 
-                object.host_title.grid(row=1, column=0)
-                object.host_entry.grid(row=1, column=1)
-                object.port_title.grid(row=2, column=0)
-                object.port_entry.grid(row=2, column=1)
-                object.topic_title.grid(row=3, column=0)
-                object.topic_entry.grid(row=3, column=1)                        
+                object.pin_title.grid(row=1, column=0)
+                object.pin_entry.grid(row=1, column=1)
+                object.host_title.grid(row=2, column=0)
+                object.host_entry.grid(row=2, column=1)
+                object.port_title.grid(row=3, column=0)
+                object.port_entry.grid(row=3, column=1)
+                object.topic_title.grid(row=4, column=0)
+                object.topic_entry.grid(row=4, column=1)                        
             
             # Init elements
             def init_elm(object):   
-                
-                
+ 
                 # Insert example text 
                 def insert_example(object): 
-                    object.name_entry.insert(0, 'Firstname Lastname')
+                    object.name_entry.insert(0, 'username')
+                    object.pin_entry.insert(0, 'pin')
                     object.host_entry.insert(0, '0.0.0.0')
                     object.port_entry.insert(0, '0000')
-                    object.topic_entry.insert(0, 'tobiistream')
+                    object.topic_entry.insert(0, 'main')
             
                 object.input_frame = Frame(object.root)
                 object.input_frame.grid(row=0, column=1, pady=(25, 0))
                 
-                object.name_title = Label(object.input_frame, text="NAME")
-                object.host_title = Label(object.input_frame, text="HOST IP")
-                object.port_title = Label(object.input_frame, text="PORT")
-                object.topic_title = Label(object.input_frame, text="TOPIC")
+                object.name_title = Label(object.input_frame, text="Username")
+                object.pin_title = Label(object.input_frame, text="Pin")
+                object.host_title = Label(object.input_frame, text="IP")
+                object.port_title = Label(object.input_frame, text="Port")
+                object.topic_title = Label(object.input_frame, text="Topic")
                 
                 object.name_entry = Entry(object.input_frame, foreground='grey')
+                object.set_pin_entry( Entry(object.get_input_frame(), foreground='grey') )
                 object.host_entry = Entry(object.input_frame, foreground='grey')
                 object.port_entry = Entry(object.input_frame, foreground='grey')
                 object.topic_entry = Entry(object.input_frame, foreground='grey')
 
                 insert_example(object) 
                 object.reconfig('init')
-                
-            
+                        
             init_elm(object)
             pack_entries(object)
             bind_entries(object) 
@@ -312,7 +384,7 @@ class Controller(Frame):
             # Init elements 
             def init_elm(object):
                 object.button_frame = Frame(object.root, borderwidth=2, border=1)
-                object.button_frame.grid(row=3, column=1, pady=(25,25), padx=(50,25))
+                object.button_frame.grid(row=1, column=1, pady=(0,25), padx=(50,25))
                 
                 object.test_button = Button(object.button_frame, text="Test", command= lambda:test_seq(object), width=15, state='normal', bg = 'white')
                 object.start_button = Button(object.button_frame, text="Start", command= lambda:start_send_seq(object), width=15, state='disabled', bg = 'white')
@@ -323,10 +395,6 @@ class Controller(Frame):
             pack_buttons(object)            
             bind_buttons(object)
             
-        
         init_button_frames(self)
         init_input_frames(self)
         
-        
-        '''self.title = Label(self.root, text=str(self.title_txt).upper()) 
-        self.title.grid(row=10, columnspan=15)'''

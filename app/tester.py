@@ -1,33 +1,29 @@
 import os 
 import tkinter 
-import kafka
 
 from tkinter import *
-from kafka import * 
 
-from tracker import Tracker 
-from gaze import Gaze 
+from consumer import Consumer
 
-class Tester(kafka.KafkaProducer): 
-    def __init__(self, controller):
-        self.tracker = None
-        self.gaze = None 
-        self.controller = controller 
+class Tester(): 
+    def __init__(self, user):
+        self.user = user
+        self.test_status = False
 
-# GET / SET tracker 
-def get_tracker(self): 
-    return self.tracker
-def set_tracker(self, tracker): 
-    self.tracker = tracker 
+    # GET / SET user 
+    def get_user(self): 
+        return self.user 
+    def set_user(self, user): 
+        self.user = user 
 
-# GET / SET gaze
-def get_gaze(self): 
-    return self.gaze
-def set_gaze(self, gaze): 
-    self.gaze = gaze 
+    # GET / SET test status 
+    def get_test_status(self):
+        return self.test_status
+    def set_test_status(self, test_status): 
+        self.test_status = test_status
 
-# GET / SET controller 
-def get_controller(self): 
-    return self.controller 
-def set_controller(self, controller): 
-    self.controller = controller  
+    # Run test sequence 
+    def run(self): 
+
+        self.get_user().set_consumer(Consumer(self.get_user()))
+        self.get_user().get_consumer().get_topics()

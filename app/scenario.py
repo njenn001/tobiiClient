@@ -144,57 +144,59 @@ class Scenario():
             
             self.clean_sequence() 
             self.clear_screen() 
-            raise Exception("Error using natural environment.")
-
+            raise Exception("Error creating natural environment.")
 
     # Stop all running threads
     def stop_threads(self): 
         try: 
-            for t in self.get_t_list():
-                if not t.is_alive(): 
-                    t.join() 
+            if len(self.get_t_list()) > 0: 
+                for t in self.get_t_list():
+                    if t.is_alive(): 
+                        pass
+                    else: 
+                        t.join() 
         except Exception as ex: 
+            print(ex)
             self.stop_threads() 
     
     # Configure scenario threads
     def configure_threads(self): 
 
         self.set_virt_thread( threading.Thread(target=self.virtual_init, args=([]) ) )
-        self.set_nat_thread( threading.Thread(target=self.natural_init, args=([]) ) )
-
-        self.add_thread(self.get_virt_thread())   
-        self.add_thread(self.get_nat_thread())     
+        self.set_nat_thread( threading.Thread(target=self.natural_init, args=([]) ) )  
 
     # Init virtual environment 
     def virtual_init(self): 
         
+        self.add_thread(self.get_virt_thread())
+
         if self.get_os_name() == 'nt':
             try:
                 print('\nCreating virtual environment ...\n')
-                os.system(r"virtualenv \..\venv")
+                os.system(r"virtualenv venv")
                 time.sleep(5)
                 
-                os.sys.execuatble = str(self.get_root_dir() + r"\venv\Scripts\python.exe")
-            
                 print('\nInstall virtual requirments ...\n')
                 os.system(r'.\venv\Scripts\pip.exe install -r .\app\requirements.txt')
+                
             except Exception as ex: 
                 self.throw_exc('env')
         else: 
             try: 
                 print('\nCreating virtual environment ...\n') 
-                os.system(r"virtualenv /../venv")
+                os.system(r"virtualenv venv")
                 time.sleep(5)
-                
-                os.sys.execuatble = self.get_root_dir() + r"/venv/bin/python"
                     
                 print('\nInstalling virtual requirments ...\n')
                 os.system(r'./venv/bin/pip install -r ./app/requirements.txt')
+
             except Exception as ex: 
                 self.throw_exc('env')
 
     # Init natural environment 
     def natural_init(self): 
+
+        self.add_thread(self.get_nat_thread())
         
         if self.get_os_name() == 'nt': 
             try:        

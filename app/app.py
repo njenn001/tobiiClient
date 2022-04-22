@@ -42,19 +42,19 @@ def virtmode():
     scene.virt_thread.start() 
     
     time.sleep(5) 
-    scene.stop_threads()     
+    scene.stop_threads()  
 
-# Natural mode 
+# Setup natural environment 
 def natmode(): 
     from scenario import Scenario
     print('Starting setup sequence...')
             
     # Run evaluation and resulting programs 
     scene = Scenario() 
-    scene.nat_thread.start() 
+    scene.nat_thread.start()
     
     time.sleep(5) 
-    scene.stop_threads()     
+    scene.stop_threads()
 
 # Clean repositories 
 def cleanmode(): 
@@ -65,7 +65,7 @@ def cleanmode():
     scene.clean_sequence() 
     
 # Start strict mode
-def strictmode(): 
+def strictmode(args): 
     from user import User 
     print('Starting strict mode...')
 
@@ -73,9 +73,9 @@ def strictmode():
     you = User() 
 
     try: 
-        you.run_strict() 
+        you.run_strict(args) 
     except Exception as ex: 
-        you.throw_exec('r')    
+        you.throw_exec('strict')    
 
 # Start gui mode
 def guimode(): 
@@ -88,6 +88,7 @@ def guimode():
         you.gui()
     except Exception as ex: 
         you.throw_exec('gui')
+        pass
 
 # Display project info
 def infomode(): 
@@ -112,7 +113,7 @@ def args_decoder(args):
 
     # Start strict mode 
     elif args.strict: 
-        strictmode() 
+        strictmode(args) 
         
     # Start gui mode
     elif args.gui: 
@@ -170,7 +171,15 @@ def init_parser():
     - broker id 
     - length 
     '''
-    
+
+    # Bootstrap server flag 
+    parser.add_argument(
+    '--bss', '--boostrap_servers', type=str, help="Specify broker IP address(es) and port number(s).", nargs='+')
+
+   # Begin strict production
+    parser.add_argument(
+    '--p', '--produce', type=str, help="Begin Production.", nargs='+')
+
     return parser 
 
 # Main function 
