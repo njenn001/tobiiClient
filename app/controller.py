@@ -125,7 +125,7 @@ class Controller(Frame):
 
     # GET / SET pin entry 
     def get_pin_entry(self): 
-        return self.pin_entry
+        return self.pin_entry.get()
     def set_pin_entry(self, pin_entry): 
         self.pin_entry = pin_entry
         
@@ -157,11 +157,34 @@ class Controller(Frame):
             self.port_entry.config(state='normal')
             self.topic_entry.config(state='disabled')  
         elif conf_str == 'test_s': 
-            self.name_entry.config(state='normal')
-            self.pin_entry.config(state='normal')
+            if self.get_user().get_test_status(): 
+                self.name_entry.config(state='normal')
+                self.pin_entry.config(state='normal')
+                self.host_entry.config(state='disabled')
+                self.port_entry.config(state='disabled')
+                self.topic_entry.config(state='normal') 
+                
+                self.test_button.config(state='disabled')
+                self.start_button.config(state='normal')
+        elif conf_str == 'start':
+            self.name_entry.config(state='disabled')
+            self.pin_entry.config(state='disabled')
             self.host_entry.config(state='disabled')
             self.port_entry.config(state='disabled')
-            self.topic_entry.config(state='normal')  
+            self.topic_entry.config(state='disabled') 
+            
+            self.start_button.config(state='disabled')
+            self.stop_button.config(state='normal')
+
+        elif conf_str == 'stop':
+            self.name_entry.config(state='disabled')
+            self.pin_entry.config(state='disabled')
+            self.host_entry.config(state='disabled')
+            self.port_entry.config(state='disabled')
+            self.topic_entry.config(state='normal') 
+            
+            self.start_button.config(state='normal')
+            self.stop_button.config(state='disabled')
 
     # OS specific and shutdown TK 
     def close(self):
@@ -179,12 +202,18 @@ class Controller(Frame):
         # REWIRE THIS 
         # Start action_set or Send action 
         def start_send_seq(object): 
-            print()
 
+            self.get_user().get_consumer().kill()             
+            self.get_user().init_tracker()
+            self.get_user().get_tracker().start_tracking('gui')
+            self.reconfig('start')
+            
         # REWIRE THIS 
         # tracking / streaming threads 
         def stop_seq(object): 
-            print()
+            self.get_user().get_tracker().stop_tracking()
+
+            self.reconfig('stop')
           
         # Perform tests before accessing other KAFKA elements 
         def test_seq(object): 
@@ -387,7 +416,7 @@ class Controller(Frame):
                 object.button_frame.grid(row=1, column=1, pady=(0,25), padx=(50,25))
                 
                 object.test_button = Button(object.button_frame, text="Test", command= lambda:test_seq(object), width=15, state='normal', bg = 'white')
-                object.start_button = Button(object.button_frame, text="Start", command= lambda:start_send_seq(object), width=15, state='disabled', bg = 'white')
+                object.start_button = Button(object.button_frame, text="Start/Send", command= lambda:start_send_seq(object), width=15, state='disabled', bg = 'white')
                 object.stop_button = Button(object.button_frame, text="Stop", command= lambda:stop_seq(object), width=15, state='disabled', bg = 'white')
                 object.close_button = Button(object.button_frame, text="Close", command= lambda:close(object), width=15, state='normal', bg = 'white')
                 

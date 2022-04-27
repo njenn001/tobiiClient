@@ -1,6 +1,12 @@
+import json
+
+from matplotlib.font_manager import json_dump
+
 class Gaze(): 
-    def __init__(self): 
-    
+    def __init__(self, user): 
+        
+        self.user = user 
+        
         self.l_x = 0 
         self.l_y = 0 
         self.r_x = 0 
@@ -8,9 +14,15 @@ class Gaze():
         self.l_mm = 0 
         self.r_mm = 0
 
-        self.l_position = []
-        self.r_position = []
-        self.gaze_position = []
+        self.dict_ver = None
+        self.json_ver = None 
+
+
+    # GET / SET user 
+    def get_user(self): 
+        return self.user 
+    def set_user(self, user): 
+        self.user = user 
 
     # GET / SET l_x
     def get_l_x(self): 
@@ -20,7 +32,7 @@ class Gaze():
     
     # GET / SET l_y
     def get_l_y(self): 
-        return l_y
+        return self.l_y
     def set_l_y(self, l_y): 
         self.l_y = l_y 
     
@@ -47,29 +59,54 @@ class Gaze():
         return self.r_mm
     def set_r_mm(self, r_mm):
         self.r_mm = r_mm
+
+    # GET / SET dict version 
+    def get_dict_ver(self): 
+        return self.dict_ver
+    def set_dict_ver(self, dict_ver): 
+        self.dict_ver = dict_ver  
+
+    # Export as string 
+    def export(self): 
+        out = "left_x" + str(self.get_l_x()) 
+        +  " left_y" + str(self.get_l_y()) 
+        + " right_x" + str(self.get_r_x()) 
+        + " right_y" +  str(self.get_r_y()) 
+        + " left_mm" + str(self.get_l_mm()) 
+        + " right_mm" + str(self.get_r_mm())
     
-    # GET / SET l_position
-    def get_l_position(self): 
-        return self.l_position
-    def set_l_position(self, l_position): 
-        self.l_position = l_position
+        return out
+
+    # Export as arrary 
+    def export_dictionary(self): 
+
+        o = {
+            "left_x" : str(self.get_l_x()),
+            "left_y" : str(self.get_l_y()),
+            "right_x" : str(self.get_r_x()),
+            "right_y" : str(self.get_r_y()),
+            "left_mm" : str(self.get_l_mm()),
+            "right_mm" : str(self.get_r_mm())
+        }
+        print(o)
+        self.set_dict_ver(o) 
+        return o
+
+    # Export as JSON object
+    def export_json(self): 
+        o = json.dumps({
+            "left_x" : str(self.get_l_x()),
+            "left_y" : str(self.get_l_y()),
+            "right_x" : str(self.get_r_x()),
+            "right_y" : str(self.get_r_y()),
+            "left_mm" : str(self.get_l_mm()),
+            "right_mm" : str(self.get_r_mm())
+        }, indent=4, default=str)
+
+        return o 
+
+        
     
-    # GET / SET r_position
-    def get_r_position(self): 
-        return self.r_position
-    def set_r_position(self, r_position): 
-        self.r_position = r_position
-    
-    # GET / SET gaze_position
-    def get_gaze_position(self): 
-        return self.gaze_position
-    def set_gaze_position(self, gaze_position):
-        self.gaze_position = gaze_position
-
-
-
-
-
 
 
 

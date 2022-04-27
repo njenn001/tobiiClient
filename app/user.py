@@ -3,8 +3,11 @@ from tkinter import *
 
 from tracker import Tracker 
 from gaze import Gaze 
-from controller import Controller 
+from controller import Controller
 from view import View
+from consumer import Consumer
+from producer import Producer 
+
 
 class User(): 
     def __init__(self, *args):
@@ -12,27 +15,33 @@ class User():
             if isinstance(args[0], Controller): 
                 self.tracker = None
                 self.gaze = None 
+                self.gazes = [] 
                 self.root = None 
                 self.controller = args[0]
                 self.view = None
 
+                self.test_status = False
+
                 self.consumer = None 
                 self.producer = None
-                self.tester = None
+                self.client = None 
                 
                 self.broker_id = ''
                 self.broker_port = ''
                 self.broker_str = '' 
             else: 
                 self.tracker = None
-                self.gaze = None 
+                self.gaze = None
+                self.gazes = []  
                 self.root = None 
                 self.controller = None
                 self.view = None
 
+                self.test_status = False 
+
                 self.consumer = None 
                 self.producer = None 
-                self.tester = None 
+                self.client = None 
 
                 self.broker_id = ''
                 self.broker_port = ''
@@ -49,7 +58,17 @@ class User():
     def get_gaze(self): 
         return self.gaze
     def set_gaze(self, gaze): 
-        self.gaze = gaze 
+        self.gaze = gaze
+
+    # GET / SET gazes 
+    def get_gazes(self): 
+        return self.gazes 
+    def set_gazes(self, gazes): 
+        self.gazes = gazes  
+
+    # ADD gaze position 
+    def add_gaze_position(self, gaze): 
+        self.gazes.append(gaze)
     
     # GET / SET root 
     def get_root(self): 
@@ -69,6 +88,12 @@ class User():
     def set_view(self, view): 
         self.view = view 
 
+    # GET / SET test status 
+    def get_test_status(self):
+        return self.test_status
+    def set_test_status(self, test_status): 
+        self.test_status = test_status
+
     # GET / SET consumer 
     def get_consumer(self): 
         return self.consumer
@@ -80,6 +105,12 @@ class User():
         return self.producer
     def set_producer(self, producer): 
         self.producer = producer 
+
+    # GET / SET client 
+    def get_client(self): 
+        return self.client 
+    def set_client(self, client): 
+        self.client = client 
 
     # GET / SET broker id 
     def get_broker_id(self): 
@@ -116,6 +147,9 @@ class User():
             self.get_view().show_text(arr) 
             raise Exception(arr)
             
+    # Initialize Tracking system
+    def init_tracker(self):
+        self.set_tracker(Tracker(self)) 
       
     # Run tkinter systems
     def gui(self): 
@@ -136,6 +170,31 @@ class User():
 
         self.root.mainloop()
 
-    # Raw/Strict tracking          
-    def run_strict(self, args):
-        if args.bss and args.p: 
+    # Strict production      
+    def strict_prod(self, args):
+        if args.bss and args.topic:    
+            self.set_broker_str(args.bss)     
+            self.init_tracker() 
+            self.get_tracker().start_tracking('strict', args.topic) 
+        else: 
+            
+            self.throw_exec('strict')
+
+    # Strict consumption      
+    def strict_con(self, args):
+        if args.bss:
+            if not args.topic:
+                self.set_broker_str(args.bss)
+                self.set_consumer(Consumer(self))
+                self.get_consumer().strict_topics()
+            elif args.topic: 
+                print(args.bss, args.topic)
+                self.set_broker_str(args.bss[0])
+                self.set_consumer(Consumer(self))
+                self.get_consumer().set_topic_name(args.topic[0])
+                self.get_consumer().strict_messages()
+                self.get_consumer().kill()
+            else: 
+                self.throw_exec('strict')
+        else: 
+            self.throw_exec('strict')

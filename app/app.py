@@ -3,7 +3,8 @@ from os import system, name
 import argparse 
 import random
 import time
-import threading 
+import threading
+from turtle import clear 
 
 # Project logo 
 logo = (r''' 
@@ -64,16 +65,30 @@ def cleanmode():
     scene = Scenario() 
     scene.clean_sequence() 
     
-# Start strict mode
-def strictmode(args): 
+# Start con mode
+def conmode(args): 
     from user import User 
-    print('Starting strict mode...')
+    clearScreen()
+    print('Starting strict consumption mode...')
 
-    # Run GUI 
+    # Decode arguments
     you = User() 
 
     try: 
-        you.run_strict(args) 
+        you.strict_con(args) 
+    except Exception as ex: 
+        you.throw_exec('strict')    
+
+# Start prod mode
+def prodmode(args): 
+    from user import User 
+    print('Starting strict production mode...')
+
+    # Decode arguments
+    you = User() 
+
+    try: 
+        you.strict_prod(args) 
     except Exception as ex: 
         you.throw_exec('strict')    
 
@@ -111,9 +126,13 @@ def args_decoder(args):
     elif args.clean: 
         cleanmode() 
 
-    # Start strict mode 
-    elif args.strict: 
-        strictmode(args) 
+    # Start strict prod mode 
+    elif args.prod: 
+        prodmode(args) 
+
+    # Start strict con mode 
+    elif args.con: 
+        conmode(args) 
         
     # Start gui mode
     elif args.gui: 
@@ -151,9 +170,13 @@ def init_parser():
     mode_group.add_argument('-c', '--clean', action='store_true',
                             help='Clean repository.')
 
-    # Strict Mode
-    mode_group.add_argument('-s', '--strict', action='store_true',
-                            help='Start tracking.')
+    # Prod Mode
+    mode_group.add_argument('-p', '--prod', action='store_true',
+                            help='Auto tracking/production.')
+
+    # Con Mode
+    mode_group.add_argument('-co', '--con', action='store_true',
+                            help='Auto reading/consumption.')
 
     # Gui Mode 
     mode_group.add_argument('-g', '--gui', action='store_true',
@@ -178,7 +201,7 @@ def init_parser():
 
    # Begin strict production
     parser.add_argument(
-    '--p', '--produce', type=str, help="Begin Production.", nargs='+')
+    '--topic', '--topic', type=str, help="Specify topic.", nargs='+')
 
     return parser 
 

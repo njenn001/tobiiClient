@@ -46,12 +46,11 @@ class View(Frame):
     def set_view_frame(self, view_frame): 
         self.view_frame = view_frame
 
-
-
-        
+    # Clear lines on view 
     def clear_lines(self): 
         self.text_lines.delete('1.0', END)
         
+    # Show captured lines of text
     def show_text(self, arr):
         self.text_lines.config(state='normal')
         self.clear_lines() 
