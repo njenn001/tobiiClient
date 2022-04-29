@@ -131,6 +131,13 @@ class User():
         self.broker_str = broker_str
 
     # Throw exception 
+    #
+    # ------------------------------------------------------------------------------
+    # Will throw an exception dependent on one of the follwing error(s) occuring: 
+    # > Disfunctional parameters 
+    # > Obj failure 
+    #
+    # ------------------------------------------------------------------------------
     def throw_exec(self, msg): 
         if msg == 'strict': 
             
@@ -146,12 +153,30 @@ class User():
             arr = ['Testing error', 'Check broker Ip address and port number', 'Ensure live Kafka elements', 'Try again']
             self.get_view().show_text(arr) 
             raise Exception(arr)
+
+
+        if msg == 'topics': 
+            arr = ['Broker topics may not exists', 'Create topic and try again'] 
+            self.get_view().show_text(arr) 
+            raise Exception(arr)
             
     # Initialize Tracking system
+    #
+    # ------------------------------------------------------------------------------
+    # Will initialize the eye tracking equipment.  
+    #
+    # ------------------------------------------------------------------------------
     def init_tracker(self):
         self.set_tracker(Tracker(self)) 
       
-    # Run tkinter systems
+    # Run GUI
+    #
+    # ------------------------------------------------------------------------------
+    # Creates a Tkinter UI and serves to user.  
+    # > Test broker existence/connectivity/content 
+    # > Stream gaze data 
+    #
+    # ------------------------------------------------------------------------------
     def gui(self): 
 
         def root_init(object): 
@@ -170,7 +195,14 @@ class User():
 
         self.root.mainloop()
 
-    # Strict production      
+    # Strict production     
+    #
+    # ------------------------------------------------------------------------------
+    # Begins strict production in the terminal. 
+    # > Streams directly to specified broker
+    # > Reliant on given topic 
+    #
+    # ------------------------------------------------------------------------------ 
     def strict_prod(self, args):
         if args.bss and args.topic:    
             self.set_broker_str(args.bss)     
@@ -181,6 +213,13 @@ class User():
             self.throw_exec('strict')
 
     # Strict consumption      
+    #
+    # ------------------------------------------------------------------------------
+    # Begins strict consumption  in the terminal. 
+    # > Streams directly from specified broker
+    # > Reliant on given topic/broker
+    #
+    # ------------------------------------------------------------------------------ 
     def strict_con(self, args):
         if args.bss:
             if not args.topic:

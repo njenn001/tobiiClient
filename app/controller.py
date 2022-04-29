@@ -148,6 +148,13 @@ class Controller(Frame):
         self.topic_entry = topic_entry 
         
     # Reconfigure elements 
+    #
+    # ------------------------------------------------------------------------------
+    # Change the configuration of elements on the controller. 
+    # > Button state/color
+    # > Entry state 
+    #
+    # ------------------------------------------------------------------------------ 
     def reconfig(self, conf_str): 
         
         if conf_str == 'init': 
@@ -186,12 +193,23 @@ class Controller(Frame):
             self.start_button.config(state='normal')
             self.stop_button.config(state='disabled')
 
-    # OS specific and shutdown TK 
+    # Close 
+    #
+    # ------------------------------------------------------------------------------
+    # Will destroy all TK elements. 
+    #
+    # ------------------------------------------------------------------------------ 
     def close(self):
         self.get_root().destroy() 
-        #os.sys.exit()
 
-    # Init UI elements / abilities 
+    # Init user interface 
+    #
+    # ------------------------------------------------------------------------------
+    # Initializes the user interface (elements within). 
+    # > Sets button/entry frames  
+    # > Specifies defined sequences
+    #
+    # ------------------------------------------------------------------------------ 
     def UIinit(self): 
 
         # OS specific and shutdown TK 

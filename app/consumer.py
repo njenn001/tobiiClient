@@ -126,6 +126,7 @@ class Consumer(KafkaConsumer):
                 
                 #self.user.view.show_text(self.messages)
                 if message.value.decode() == ' ' or message.value.decode() == '':
+                    object.set_exists(False)
                     print("No more messages")
                     break 
 
@@ -167,6 +168,7 @@ class Consumer(KafkaConsumer):
 
                         #object.user.view.show_text(object.messages)
                         if message.value.decode() == ' ' or message.value.decode() == '':
+                            object.set_exists(False)
                             print("No more messages")
                             break 
 
@@ -219,7 +221,8 @@ class Consumer(KafkaConsumer):
                 self.get_user().get_controller().reconfig('test_s')
 
         except Exception as ex: 
-            
+
+            self.set_exists(False)
             self.get_user().throw_exec('test')    
             self.get_user().get_consumer().kill() 
             print(ex)

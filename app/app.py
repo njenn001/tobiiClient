@@ -7,6 +7,11 @@ import threading
 from turtle import clear 
 
 # Project logo 
+#
+# ------------------------------------------------------------------------------
+# Logo used for the Tobii client application. 
+# 
+# ------------------------------------------------------------------------------
 logo = (r''' 
 
  ___________________
@@ -27,13 +32,25 @@ logo = (r'''
 ''')
 
 # Clear terminal screen
+#
+# ------------------------------------------------------------------------------
+# Will clear the terminal screen
+#
+# ------------------------------------------------------------------------------
 def clearScreen():
     if name == 'nt': 
         _ = system('cls') 
     else: 
         _ = system('clear') 
 
-# Create virtual environment 
+# Start virtual mode
+#
+# ------------------------------------------------------------------------------
+# Will initialize the virtual environment to run the application. 
+# > Installs requirements
+# > Cleans repository 
+#
+# ------------------------------------------------------------------------------
 def virtmode(): 
     from scenario import Scenario
     print('Starting setup sequence...')
@@ -45,7 +62,14 @@ def virtmode():
     time.sleep(5) 
     scene.stop_threads()  
 
-# Setup natural environment 
+# Start natural mode
+#
+# ------------------------------------------------------------------------------
+# Will initialize the natural environment to run the application. 
+# > Installs requirements
+# > Cleans repository 
+#
+# ------------------------------------------------------------------------------
 def natmode(): 
     from scenario import Scenario
     print('Starting setup sequence...')
@@ -57,7 +81,13 @@ def natmode():
     time.sleep(5) 
     scene.stop_threads()
 
-# Clean repositories 
+# Start clean mode
+#
+# ------------------------------------------------------------------------------
+# Begin repository cleaning. 
+# > Removes cache files 
+#
+# ------------------------------------------------------------------------------
 def cleanmode(): 
     from scenario import Scenario
     print('Cleaning...')
@@ -66,6 +96,13 @@ def cleanmode():
     scene.clean_sequence() 
     
 # Start con mode
+#
+# ------------------------------------------------------------------------------
+# Begin consumption mode through the command line, rather than the gui. 
+# > Read existing topics
+# > Capture previously stored data 
+#
+# ------------------------------------------------------------------------------
 def conmode(args): 
     from user import User 
     clearScreen()
@@ -80,6 +117,13 @@ def conmode(args):
         you.throw_exec('strict')    
 
 # Start prod mode
+#
+# ------------------------------------------------------------------------------
+# Begin production mode through the command line, rather than the gui. 
+# > Stream gaze data to specified broker
+# > Send to specified port  
+#
+# ------------------------------------------------------------------------------
 def prodmode(args): 
     from user import User 
     print('Starting strict production mode...')
@@ -93,6 +137,14 @@ def prodmode(args):
         you.throw_exec('strict')    
 
 # Start gui mode
+#
+# ------------------------------------------------------------------------------
+# Tkinter graphical user interface that lets users commit the following actions: 
+# > test broker existence/connectivity
+# > strean gaze position 
+# > read sent data 
+#
+# ------------------------------------------------------------------------------
 def guimode(): 
     from user import User 
     print('Starting gui...')
@@ -105,13 +157,24 @@ def guimode():
         you.throw_exec('gui')
         pass
 
-# Display project info
+# Start info mode 
+#
+# ------------------------------------------------------------------------------
+# Displays information regarding the client application. 
+# 
+# ------------------------------------------------------------------------------
 def infomode(): 
     
     clearScreen() 
     print(logo) 
 
 # Decode available arguments 
+#
+# ------------------------------------------------------------------------------
+# Decoding arguments captured by the argument parser.
+# > Begin use cases 
+# 
+# ------------------------------------------------------------------------------
 def args_decoder(args): 
         
     # Start virtual mode  
@@ -123,26 +186,36 @@ def args_decoder(args):
         natmode()          
 
     # Start clean mode
-    elif args.clean: 
+    if args.clean: 
         cleanmode() 
 
     # Start strict prod mode 
-    elif args.prod: 
+    if args.prod: 
         prodmode(args) 
 
     # Start strict con mode 
-    elif args.con: 
+    if args.con: 
         conmode(args) 
         
     # Start gui mode
-    elif args.gui: 
+    if args.gui: 
         guimode() 
         
     # Start info mode
-    elif args.info: 
+    if args.info: 
         infomode()
 
+    if not any(vars(args).values()): 
+        guimode() 
+
 # Init command parser 
+#
+# ------------------------------------------------------------------------------
+# Return argument parser used in main function.
+# > Add use cases 
+# > Display usefull information 
+# 
+# ------------------------------------------------------------------------------
 def init_parser(): 
     parser = argparse.ArgumentParser(
                 formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -156,7 +229,7 @@ def init_parser():
     - strict
     - gui 
     '''
-    mode_group = parser.add_mutually_exclusive_group(required=True)
+    mode_group = parser.add_mutually_exclusive_group(required=False)
 
     # Virt Mode 
     mode_group.add_argument('-e', '--env', action='store_true',
@@ -206,6 +279,13 @@ def init_parser():
     return parser 
 
 # Main function 
+#
+# ------------------------------------------------------------------------------
+# Argument parser from the command line or executable file.
+# > Show simple gui 
+# > Allow command line use  
+# 
+# ------------------------------------------------------------------------------
 def main(): 
         
     # Set and capture command line arguments     
