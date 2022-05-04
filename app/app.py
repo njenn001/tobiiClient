@@ -4,7 +4,6 @@ import argparse
 import random
 import time
 import threading
-from turtle import clear 
 
 # Project logo 
 #

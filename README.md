@@ -55,7 +55,7 @@ After confirming correct Python installations, os dependent instructions are pro
     git clone https://github.com/njenn001/tobiiClient.git
     ```
 
-2. First install dependencies and create virtual environment by running setup scripts:
+2. First satisfy software requirements then create virtual environment by running setup scripts:
 
     ```
     python app/app.py -e
