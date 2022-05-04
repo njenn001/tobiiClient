@@ -5,8 +5,9 @@ Stream tobii gaze data to kafka brokers
 ## Prerequisites
 
     - python 3.8
-    - python3-venv
-    - python3-pip 
+    - python3-pip
+    - python3-virtualenv
+    - python3-tk 
 
 
 ## Usage
@@ -21,7 +22,7 @@ After confirming correct Python installations, os dependent instructions are pro
     git clone https://github.com/njenn001/tobiiClient.git
     ```
 
-2. First install dependencies and create virtual environment by running setup scripts:
+2. First satisfy software requirements then create virtual environment by running setup scripts:
 
     ```
     python app\app.py -e
@@ -38,7 +39,8 @@ After confirming correct Python installations, os dependent instructions are pro
 
     ```
     .\venv\Scripts\python.exe .\app\app.py -g
-    .\venv\Scripts\python.exe .\app\app.py -s
+    .\venv\Scripts\python.exe .\app\app.py -p
+    .\venv\Scripts\python.exe .\app\app.py -co
     ```
 
 5. Deactivate the virtual environment as such:
@@ -71,7 +73,9 @@ After confirming correct Python installations, os dependent instructions are pro
 4. The application comes with a strict mode and an interactive gui (on applicable machines).
 
     ```
-    ./venv/Scripts/python.exe ./app/app.py -s
+    ./venv/bin/python3 ./app/app.py -g
+    ./venv/bin/python3 ./app/app.py -p
+    ./venv/bin/python3 ./app/app.py -co
     ```
 
 5. Deactivate the virtual environment as such:
